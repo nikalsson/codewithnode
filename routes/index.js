@@ -1,7 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const passport = require('passport');
-const { postRegister } = require('../controllers'); // JS finds a file called index by default
+const { postRegister, postLogin, getLogout } = require('../controllers'); // JS finds a file called index by default
 const { errorHandler } = require('../middleware');
 
 /* GET home page */
@@ -23,16 +22,10 @@ router.get('/login', (req, res, next) => {
 });
 
 /* POST /login */
-router.post('/login', passport.authenticate('local', { 
-  successRedirect: '/', 
-  failureRedirect: '/login'
-}));
+router.post('/login', postLogin);
 
 /* GET /login */
-router.get('/logout', (req, res, next) => {
-  req.logout();
-  res.redirect('/');
-});
+router.get('/logout', getLogout);
 
 /* GET /forgot-password */
 router.get('/forgot-password', (req, res, next) => {
