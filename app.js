@@ -3,12 +3,26 @@ const express = require('express');
 const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
+const passport = require('passport');
+const session = require('express-session');
+const mongoose = require('mongoose');
+const User = require('./models/user');
 
+// Require routes
 const index = require('./routes/index');
 const posts = require('./routes/posts');
 const reviews = require('./routes/reviews')
 
 const app = express();
+
+// Connect to the database
+mongoose.set('useCreateIndex', true)
+mongoose.connect('mongodb://localhost:27017/surf-shop', { useNewUrlParser: true });
+const db = mongoose.connection;
+db.on('error', console.error.bind(console, 'connection error:'));
+db.once('open', () => {
+  console.log('CONNECTED TO THE DATABASE');
+});
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -20,6 +34,23 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+
+// Configure Passport and Session, Session has to be 1st!
+app.use(session({
+  secret: 'MegaSecret',
+  resave: false,
+  saveUninitialized: true
+}));
+
+app.use(passport.initialize());
+app.use(passport.session());
+
+// CHANGE: USE "createStrategy" INSTEAD OF "authenticate" https://github.com/saintedlama/passport-local-mongoose
+passport.use(User.createStrategy());
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
+
+// Mount routes
 app.use('/', index);
 app.use('/posts', posts);
 app.use('/posts/:id/reviews', reviews)
