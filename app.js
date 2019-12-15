@@ -1,3 +1,4 @@
+require('dotenv').config(); // Require dotenv to use environmental variables
 const createError = require('http-errors');
 const express = require('express');
 const path = require('path');

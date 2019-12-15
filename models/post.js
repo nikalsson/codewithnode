@@ -5,19 +5,22 @@ const PostSchema = new Schema({
     title: String,
     price: String,
     description: String,
-    images: [String],
+    images: [{
+			url: String, 
+			public_id: String
+    }],
     location: String,
     lat: Number,
     lng: Number,
     author: {
-        type: Schema.Types.ObjectId,
-        ref: 'User'
+			type: Schema.Types.ObjectId,
+			ref: 'User'
     },
     reviews: [
-        {
-            type: Schema.Types.ObjectId,
-            ref: 'Review'
-        }
+			{
+				type: Schema.Types.ObjectId,
+				ref: 'Review'
+			}
     ]
 });
 

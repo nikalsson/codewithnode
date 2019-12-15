@@ -1,7 +1,17 @@
 const express = require('express');
 const router = express.Router();
+const multer = require('multer');
+const upload = multer({'dest': 'uploads/'});
 const { asyncErrorHandler } = require('../middleware');
-const { postIndex, postNew, postCreate, postShow, postEdit, postUpdate, postDelete } = require('../controllers/posts');
+const { 
+  postIndex, 
+  postNew, 
+  postCreate, 
+  postShow,
+  postEdit, 
+  postUpdate, 
+  postDelete 
+} = require('../controllers/posts');
 
 /* GET posts index, /posts */
 router.get('/', asyncErrorHandler(postIndex));
@@ -9,8 +19,8 @@ router.get('/', asyncErrorHandler(postIndex));
 /* GET posts new, /posts/new */
 router.get('/new', postNew); // newPost is not async function --> no asyncErrorHandler
 
-/* POST posts create, /posts */
-router.post('/', asyncErrorHandler(postCreate));
+/* POST posts create, /posts -- multer upload name string matches the one in surfshop\views\posts\new.ejs input field name attribute*/
+router.post('/', upload.array('images', 4), asyncErrorHandler(postCreate));
 
 /* GET posts show, /posts/:id */
 router.get('/:id', asyncErrorHandler(postShow));
