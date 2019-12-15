@@ -4,6 +4,16 @@
     <!-- name is post[xxx] so it can be passed on in the posts.js controller as req.body.post when making the update -->
     <div><input type="text" name="post[title]" placeholder="title" value="<%= post.title %>"></div>
     <div><input type="text" name="post[price]" placeholder="price" value="<%= post.price %>"></div>
+    <div>
+        <!-- The name attribute is defined in surfshop\routes\posts.js ==> upload.array('images', 4) -->
+				<input type="file" accept="image/*" name="images" multiple />
+				<div>
+					<% post.images.forEach(function(image) { %>
+						<img src="<%= image.url %>" alt="Product image" width="100px">
+					<% }); %>
+				</div>
+
+    </div> 
     <div><textarea name="post[description]" placeholder="description"><%= post.description %></textarea></div>
     <div><input type="text" name="post[location]" placeholder="location" value="<%= post.location %>"></div>
 
